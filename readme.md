@@ -1,3 +1,195 @@
+# Project Report: Currency Converter Using C++ with CGI (Backend)
+
+## Abstract
+This project implements a simple currency converter using **C++** as the backend and **HTML** for the frontend, connecting them through the **Common Gateway Interface (CGI)**. The application converts amounts between different currencies based on predefined exchange rates, enabling dynamic user interaction via a web browser.
+
+---
+
+## Objectives
+- To develop a functional web-based currency converter.
+- To integrate C++ backend logic with a web interface using CGI.
+- To demonstrate the use of CGI for server-side scripting in a Windows environment.
+
+---
+
+## Tools and Technologies
+- **Programming Language**: C++
+- **Web Technologies**: HTML, CGI
+- **Server**: Apache (via XAMPP)
+- **Compiler**: MinGW (or equivalent)
+- **Operating System**: Windows
+
+---
+
+## Features
+1. Supports conversion between multiple currencies.
+2. User-friendly web interface for input.
+3. Fast and lightweight backend processing with C++.
+4. Modular design for easy extensibility.
+
+---
+
+## System Architecture
+The project comprises two main components:
+
+1. **Frontend**:
+   - HTML-based form for user input (source currency, target currency, and amount).
+   - Sends data to the backend via a GET request.
+
+2. **Backend**:
+   - A CGI script written in C++ that processes user input and performs currency conversion.
+   - Returns the result as a dynamically generated HTML page.
+
+---
+
+## Implementation Steps
+
+### Step 1: Environment Setup
+1. Install XAMPP to configure Apache server with CGI support.
+2. Configure Apache by enabling the CGI module and setting up the `cgi-bin` directory.
+
+### Step 2: Backend Development
+1. Write the C++ code for currency conversion logic.
+2. Handle CGI queries to process user input and generate dynamic responses.
+3. Compile the C++ code into an executable file.
+
+### Step 3: Frontend Development
+1. Create an HTML form to capture user input.
+2. Use the form's action attribute to call the backend executable.
+
+### Step 4: Integration and Testing
+1. Place the compiled executable in the `cgi-bin` directory.
+2. Save the HTML file in the `htdocs` directory.
+3. Test the application using a web browser.
+
+---
+
+## Code Implementation
+
+### Backend (C++)
+**File**: `currency_converter.cpp`
+```cpp
+#include <iostream>
+#include <string>
+#include <map>
+#include <cstdlib>
+
+void printHTMLHeader() {
+    std::cout << "Content-type: text/html\n\n";
+    std::cout << "<!DOCTYPE html>\n<html>\n<head>\n<title>Currency Converter</title>\n</head>\n<body>\n";
+}
+
+void printHTMLFooter() {
+    std::cout << "</body>\n</html>\n";
+}
+
+int main() {
+    printHTMLHeader();
+
+    std::map<std::string, double> exchangeRates = {
+        {"USD_TO_INR", 82.75},
+        {"EUR_TO_INR", 89.34},
+        {"GBP_TO_INR", 102.56}
+    };
+
+    const char* queryString = getenv("QUERY_STRING");
+    if (queryString) {
+        std::string query(queryString);
+        std::string fromCurrency, toCurrency;
+        double amount = 0.0;
+
+        size_t fromPos = query.find("from=");
+        size_t toPos = query.find("to=");
+        size_t amountPos = query.find("amount=");
+
+        if (fromPos != std::string::npos && toPos != std::string::npos && amountPos != std::string::npos) {
+            fromCurrency = query.substr(fromPos + 5, toPos - fromPos - 6);
+            toCurrency = query.substr(toPos + 3, amountPos - toPos - 4);
+            amount = std::stod(query.substr(amountPos + 7));
+
+            std::string key = fromCurrency + "_TO_" + toCurrency;
+
+            if (exchangeRates.find(key) != exchangeRates.end()) {
+                double convertedAmount = amount * exchangeRates[key];
+                std::cout << "<h1>Converted Amount: " << convertedAmount << " " << toCurrency << "</h1>\n";
+            } else {
+                std::cout << "<h1>Error: Unsupported currency conversion.</h1>\n";
+            }
+        } else {
+            std::cout << "<h1>Error: Invalid query string.</h1>\n";
+        }
+    } else {
+        std::cout << "<h1>Error: No query string found.</h1>\n";
+    }
+
+    printHTMLFooter();
+    return 0;
+}
+```
+
+### Frontend (HTML)
+**File**: `index.html`
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Currency Converter</title>
+</head>
+<body>
+    <h1>Currency Converter</h1>
+    <form action="/cgi-bin/currency_converter.exe" method="GET">
+        <label for="from">From Currency:</label>
+        <input type="text" id="from" name="from" required><br>
+
+        <label for="to">To Currency:</label>
+        <input type="text" id="to" name="to" required><br>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" step="0.01" required><br>
+
+        <button type="submit">Convert</button>
+    </form>
+</body>
+</html>
+```
+
+---
+
+## Testing
+1. Access the executable:
+   ```
+http://localhost/cgi-bin/currency_converter.exe
+   ```
+2. Load the HTML form:
+   ```
+http://localhost/index.html
+   ```
+3. Input values and submit the form to verify the results.
+
+---
+
+## Challenges and Solutions
+1. **Issue**: Apache not executing CGI scripts.
+   - **Solution**: Verify CGI configuration in `httpd.conf` and ensure `.exe` files are allowed.
+
+2. **Issue**: Incorrect query string parsing.
+   - **Solution**: Debug using `std::cout` statements and review URL encoding.
+
+---
+
+## Future Enhancements
+1. Support for additional currencies.
+2. Integration of real-time exchange rates using APIs.
+3. Improved UI/UX with CSS and JavaScript.
+
+---
+
+## Conclusion
+This project successfully demonstrates the integration of a C++ backend with a web interface using CGI. It highlights the potential of using CGI for lightweight and efficient server-side scripting.
+
+
+
+#How to setup:
 # Currency Converter Using C++ with CGI (Backend)
 
 This project demonstrates how to build a currency converter using **C++** as the backend and connect it to a web interface via CGI (Common Gateway Interface). Below are the detailed steps to set up, compile, and run the project on a Windows environment using XAMPP.
