@@ -37,6 +37,68 @@ This project demonstrates how to build a currency converter using **C++** as the
 
 ### Step 3: Write and Compile the C++ Code
 1. Create a C++ script `currency_converter.cpp` with your currency conversion logic.
+
+#### Complete Code for `currency_converter.cpp`
+```cpp
+#include <iostream>
+#include <string>
+#include <map>
+#include <cstdlib>
+
+void printHTMLHeader() {
+    std::cout << "Content-type: text/html\n\n";
+    std::cout << "<!DOCTYPE html>\n";
+    std::cout << "<html>\n<head>\n<title>Currency Converter</title>\n</head>\n<body>\n";
+}
+
+void printHTMLFooter() {
+    std::cout << "</body>\n</html>\n";
+}
+
+int main() {
+    printHTMLHeader();
+
+    std::map<std::string, double> exchangeRates = {
+        {"USD_TO_INR", 82.75},
+        {"EUR_TO_INR", 89.34},
+        {"GBP_TO_INR", 102.56}
+    };
+
+    const char* queryString = getenv("QUERY_STRING");
+    if (queryString) {
+        std::string query(queryString);
+        std::string fromCurrency, toCurrency;
+        double amount = 0.0;
+
+        size_t fromPos = query.find("from=");
+        size_t toPos = query.find("to=");
+        size_t amountPos = query.find("amount=");
+
+        if (fromPos != std::string::npos && toPos != std::string::npos && amountPos != std::string::npos) {
+            fromCurrency = query.substr(fromPos + 5, toPos - fromPos - 6);
+            toCurrency = query.substr(toPos + 3, amountPos - toPos - 4);
+            amount = std::stod(query.substr(amountPos + 7));
+
+            std::string key = fromCurrency + "_TO_" + toCurrency;
+
+            if (exchangeRates.find(key) != exchangeRates.end()) {
+                double convertedAmount = amount * exchangeRates[key];
+                std::cout << "<h1>Converted Amount: " << convertedAmount << " " << toCurrency << "</h1>\n";
+            } else {
+                std::cout << "<h1>Error: Unsupported currency conversion.</h1>\n";
+            }
+        } else {
+            std::cout << "<h1>Error: Invalid query string.</h1>\n";
+        }
+    } else {
+        std::cout << "<h1>Error: No query string found.</h1>\n";
+    }
+
+    printHTMLFooter();
+    return 0;
+}
+```
+
 2. Open a command prompt and navigate to the directory containing `currency_converter.cpp`.
 3. Compile the script using MinGW:
    ```bash
@@ -49,6 +111,32 @@ This project demonstrates how to build a currency converter using **C++** as the
 
 ### Step 4: Create the HTML File
 1. Create an HTML file `index.html` with the required form fields for currency conversion.
+
+#### Complete Code for `index.html`
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Currency Converter</title>
+</head>
+<body>
+    <h1>Currency Converter</h1>
+    <form action="/cgi-bin/currency_converter.exe" method="GET">
+        <label for="from">From Currency:</label>
+        <input type="text" id="from" name="from" required><br>
+
+        <label for="to">To Currency:</label>
+        <input type="text" id="to" name="to" required><br>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" step="0.01" required><br>
+
+        <button type="submit">Convert</button>
+    </form>
+</body>
+</html>
+```
+
 2. Save the file in the `htdocs` directory of your XAMPP installation:
    ```bash
    C:/xampp/htdocs/index.html
@@ -124,3 +212,6 @@ http://localhost/index.html
 ```
 
 ---
+
+### Author
+Created by **Mr.Brijesh Nishad (Software Developer) **.
