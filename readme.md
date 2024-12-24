@@ -134,23 +134,106 @@ int main() {
 <html>
 <head>
     <title>Currency Converter</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Body Styling */
+        body {
+            background: linear-gradient(135deg, #e0e0e0, #90caf9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container Styling */
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 10px;
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+
+        /* Heading Styling */
+        .container h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #42a5f5, #1e88e5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #1e88e5, #1565c0);
+        }
+    </style>
 </head>
 <body>
-    <h1>Currency Converter</h1>
-    <form action="/cgi-bin/currency_converter.exe" method="GET">
-        <label for="from">From Currency:</label>
-        <input type="text" id="from" name="from" required><br>
+    <div class="container">
+        <h1>Currency Converter</h1>
+        <form action="/cgi-bin/currencyConverter.exe" method="GET">
+            <label for="from">From Currency:</label>
+            <input type="text" id="from" name="from" placeholder="e.g., USD" required><br>
 
-        <label for="to">To Currency:</label>
-        <input type="text" id="to" name="to" required><br>
+            <label for="to">To Currency:</label>
+            <input type="text" id="to" name="to" placeholder="e.g., INR" required><br>
 
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" step="0.01" required><br>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" step="0.01" placeholder="e.g., 100" required><br>
 
-        <button type="submit">Convert</button>
-    </form>
+            <button type="submit">Convert</button>
+        </form>
+    </div>
 </body>
 </html>
+
 ```
 
 ---
@@ -158,7 +241,7 @@ int main() {
 ## Testing
 1. Access the executable:
    ```
-http://localhost/cgi-bin/currency_converter.exe
+http://localhost/cgi-bin/currencyConverter.exe
    ```
 2. Load the HTML form:
    ```
@@ -228,9 +311,9 @@ This project demonstrates how to build a currency converter using **C++** as the
 5. Save the file and restart Apache from the XAMPP control panel.
 
 ### Step 3: Write and Compile the C++ Code
-1. Create a C++ script `currency_converter.cpp` with your currency conversion logic.
+1. Create a C++ script `currencyConverter.cpp` with your currency conversion logic.
 
-#### Complete Code for `currency_converter.cpp`
+#### Complete Code for `currencyConverter.cpp`
 ```cpp
 #include <iostream>
 #include <string>
@@ -337,7 +420,7 @@ int main() {
 ### Step 5: Test CGI Execution
 1. Open your browser and navigate to:
    ```
-   http://localhost/cgi-bin/currency_converter.exe
+   http://localhost/cgi-bin/currencyConverter.exe
    ```
 2. If properly configured, the output of the CGI script will be displayed.
 
@@ -347,7 +430,7 @@ int main() {
    http://localhost/index.html
    ```
 2. Fill in the form fields and submit.
-3. The form sends a GET request to `currency_converter.exe`, processes the request, and returns the result.
+3. The form sends a GET request to `currencyConverter.exe`, processes the request, and returns the result.
 
 ---
 
@@ -397,7 +480,7 @@ move currency_converter.exe C:/xampp/cgi-bin/
 ### Run Application
 ```bash
 # Test CGI Execution
-http://localhost/cgi-bin/currency_converter.exe
+http://localhost/cgi-bin/currencyConverter.exe
 
 # Access the HTML Form
 http://localhost/index.html
