@@ -12,6 +12,12 @@ This project implements a simple currency converter using **C++** as the backend
 
 ---
 
+
+Here is an image from my project:
+
+![Home Image](Testing-clips/Home.png)
+
+
 ## Tools and Technologies
 - **Programming Language**: C++
 - **Web Technologies**: HTML, CGI
